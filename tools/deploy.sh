@@ -39,7 +39,7 @@ init() {
     if [[ -z ${GITHUB_ACTION+x} && $_opt_dry_run == 'false' ]]; then
         echo "ERROR: It is not allowed to deploy outside of the GitHub Action envrionment."
         echo "Type option '-h' to see the help information."
-        exit -1
+        exit 1
     fi
 
     _baseurl="$(grep '^baseurl:' _config.yml | sed "s/.*: *//;s/['\"]//g;s/#.*//")"
