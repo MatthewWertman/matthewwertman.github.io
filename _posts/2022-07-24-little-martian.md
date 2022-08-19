@@ -6,18 +6,20 @@ tags: [little-martian, tutorial]
 author: mwertman
 ---
 
-Breif introduction on how I found one of my favorite games to both play and develop!
+Brief introduction on how I found one of my favorite games to both play and develop!
 
 ## Origin Story
-Little Martian is a open world survival craft game (as of now, just a demo). All made within the Construct3 engine by Charlie, Jack, and  Craig Smith. I think it's a beautifully-crafted game and I sure have been having my fun with it. Both gameplay-wise and the development side. No, I did not join the development team (though I have interacted with Craig, the lead developer, and he is very nice :)), but I have been taking a deeper look into what makes this game tick. I have never fully developed a game before, but this one immediately caught my attention when I first saw it. Obviously , this type of game has been made before but I like a lot of what this one does in paricular. 
+Little Martian is a open world survival craft game (as of now, just a demo) created by Charlie, Jack, and Craig Smith. I think it's a beautifully-crafted game and I sure have been having my fun with it. Not only have I been playing the game, but taking a deeper dive into the files to see what makes this game tick. Game development has always been an curiosity of mine. I have never fully developed a game before or even know where to begin.
 
-However, the main thing that caught my attention was that it's all web-based! It all takes place in the browser essentially. I was very curious about this and instantly wanted to learn more.
+My plan was to essentially try and find an candidate that was easy to understand with my current limited knowledge of game-dev AND was able to be broken-down to it's source files. Effectively, instead of building a game, reverse-engineering an existing one. At the time, I was also helping out on an open-source project centered around de-compiling/reverse-engineering a little known GameCube game called Gladius by Lucus Arts. A lot of it was over my head, so I didn't work on the main tools, but rather creating helpful scripts/docs for people that were modding the game. At the root, this is where this idea came from. I wanted to work on my own project (something that I can actually understand!) on a little bit of a smaller scale.
+
+I ended up finding Little Martian, which was the perfect candidate for this! A simple 2D sprite-based game written in 100% JavaScript.
 
 ## Technologies Behind The Game
 
-[Construct3](https://www.construct.net/en) is a HTML5 2D game engine aimed towards non and beginner programmers. Contruct offers a lot of cool features like cross-platform capabilities. Since it is all made with web technoligies (HTML, CSS, and JS), these games built within the engine can be play on anything that can run a browser.
+[Construct3](https://www.construct.net/en) is a HTML5 2D game engine aimed towards non and beginner programmers. Construct3 offers a lot of cool features like easy-to-use web editor, 3D-like capabilities, and cross-platform support for any device. Since it is all made with web technologies (HTML, CSS, and JS), these games built within the engine can be play on anything that can run a browser.
 
-[NW.js/node-webkit](https://nwjs.io/) is the main tool that helps make this cross-platform feature possible. Similar to [Electron](https://www.electronjs.org/), you can write or turn your web applications to native standalone applications using chromium and nodejs.
+[NW.js/node-webkit](https://nwjs.io/) is the main tool that helps make this cross-platform feature possible. Similar to [Electron](https://www.electronjs.org/), you can write or turn your web applications to native standalone applications using chromium and nodejs. This is was Construct3 uses behind the scenes to bundle/distribute your game!
 
 ## How Does Contruct3/NW.js Pack Your Game?
 
@@ -26,35 +28,26 @@ On the [NW.js docs](https://nwjs.readthedocs.io/en/latest/For%20Users/Package%20
 
 2. Zip File - Package your app files into a zip file named 'package.nw'
 
-Not sure if this is just the default way the Contruct does it, but Little Martian uses the second method. We will get into this in the next section.
+The second method can be seen in Little Martian. Looking in the root directory, you will see an 'package.nw' like mentioned in the docs. I have not personally used Construct3 and am not sure if this is something that the developer can control or if it just the default settings set in the engine.
 
 ## Accessing The Game Files
-> WARNING: Spoiler warning for the game if you decide to look at the game files following along with this section.
+> WARNING: The following section showcases how to get access to the source file of Little Martian and therefore ruined the experience of the game. In though it is only a demo, some spoilers may be exposed.
 {: .prompt-warning}
 
-With the history out of the way, I want to get into how exactly I got access to the source files for the game. It was surprising easy! You can even follow along with this section and start exploring the files yourself. 
+With the history out of the way, I want to get into how exactly I got access to the source files for the game. It was surprising easy! You can even follow along with this section and start exploring the files yourself.
 
 Firstly, however, I do recommend playing the game first as this might ruin the game for you.
 
-Lets start by getting the game! Simply go the [Little Martian](https://little-martian.dev/demo/)'s website and download the version for your current platform. At the time of this post, the game is not fully out yet and only offers a playable demo right now. The current version is `0.6.2`.
+Lets start by getting the game! Simply go the [Little Martian](https://little-martian.dev/demo/)'s website and download for your current platform. At the time of this post, the game is not fully out yet and only offers a playable demo right now. The current version is `0.6.2`.
 
-### If Version 0.6.2 is Not Available
-Don't tell anyone I told you this, but you may still be able to get version 0.6.2 if it's unavailable on the website. All you time travellers, LISTEN UP!
+If you are reading in the future and the above version is not the current version any longer, don't worry! The following content should work no matter what version. Just download what ever the latest version is. Or maybe the game is finally out on [Steam](https://store.steampowered.com/app/1455610/Little_Martian/).
 
-Go to `https://little-martian-builds.s3.eu-west-2.amazonaws.com/0.6.2/little-martian-0.6.2-<platform>.zip` and it should automatically download the 0.6.2 version from their build server!
-
-If you want, you can also validate your download with the following md5 checksums:
-```
-c608056861e43850db2dc5f28059694c  little-martian-0.6.2-linux.zip
-53db2b5f537415e934b93969489764db  little-martian-0.6.2-mac.zip
-b33c23ca781e0f5a73d2928a17c3b72a  little-martian-0.6.2-windows.zip
-```
-
-> I will be working with the linux version as I am currently on Pop!_OS. So the following tree of files may be different for you depending on the version for your platform.
+> Depending on the platform, the following directory tree may look quite a bit different. Linux and Windows have a pretty similar structure. Mac OS's content mainly takes place in `Contents/Resources/`{: .filepath}.
+As you will see, I will be working with Linux build.
 {: .prompt-warning}
 
-After you extract the zip archive, you will see a new directory `little-martian-0.6.2-<your-platform>`{: .filepath}. 
-The following is the structure of the **linux** version of the game. 
+After you extract the zip archive, you will see a new directory `little-martian-0.6.2-<your-platform>`{: .filepath}.
+The following is the structure of the **Linux** version of the game.
 ```
 └── little-martian-0.6.2-linux
     ├── icudtl.dat
@@ -81,12 +74,33 @@ The following is the structure of the **linux** version of the game.
 ```
 *There is another directory `__MACOSX`{: .filepath}, but this can be safely ignored/deleted.*
 
-The key file to be aware of is the `package.nw`{: .filepath} archive or `Contents/Resources/app.nw`{: .filepath} on Mac OS as this is where all of the game files are stored! In here is all the engine code (!) and user scripts for the game. 
+The key file to be aware of is the `package.nw`{: .filepath} archive or `Contents/Resources/app.nw`{: .filepath} on Mac OS as this is where all of the game files are stored! In here is all the engine code (!) and user scripts for the game.
 
 And it is just as simple as extracting the `package.nw`{: .filepath} archive as any other zip archive!
 
+Here is the inner `package.nw`{: .filepath} project structure:
+```
+├── cursor.css
+├── data.json
+├── icons
+│   ├── ...
+├── images
+│   ├── ...
+├── index.html
+├── media
+│   ├── ...
+├── package.json
+├── scripts
+│   ├── c3runtime.js
+│   ├── dispatchworker.js
+│   ├── jobworker.js
+│   ├── main.js
+│   └── supportcheck.js
+├── style.css
+```
+
 ## Game Extractor Script
-As a bonus, I will include a script to help extract the game. Its nothing fancy!
+As a bonus, I will include a helpful shell script that does just this.
 ```bash
 #!/bin/bash
 # game_extractor -- extracts little-martian game
@@ -149,12 +163,16 @@ To use, run the following: `./game_extractor -o <platform> -v <game-version>`
 
 ## Closing Notes
 
-Feel free to try on your own! You are now able to explore and even get into modifing the files.
+Feel free to try on your own! You are now able to explore and even get into modifying the files.
 
 Something to play with is this [randomizer script](https://gist.github.com/MatthewWertman/d3385c4f50c09585d15639fbcdcdc9d6) that I wrote in Python. It will randomize the starting items
 that you get from your ship! *Make sure to have the game extracted before running the randomizer.*
 
+One last thing, I really want to thank the devs for their amazing game! I am excited to see the finished product and have been become a fan of their work. I have interacted with Craig, the lead developer, and he was really nice and was telling me of some cool ideas that might get added! Tune into their Twitter or Discord server for updates with the links below. Show them some love!
+
 ## Links
-[Little Martian Website](https://little-martian.dev/demo/)
+[Little Martian website](https://little-martian.dev/)
 
 [Little Martian Twitter](https://twitter.com/MartiansGame)
+
+[Little Martian Discord Invite](http://discord.gg/fH7agQaHPx)
